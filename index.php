@@ -6,7 +6,7 @@
     // add expantions options
     // a ban list
     require 'curlFile.php';
-    include 'validate'
+    include 'validate.php'
 ?>
 <!DOCTYPE HTML>  
 <html>
