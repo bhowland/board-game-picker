@@ -5,6 +5,8 @@
     // coop vs competive 
     // add expantions options
     // a ban list
+    require 'curlFile.php';
+    include 'validate'
 ?>
 <!DOCTYPE HTML>  
 <html>
@@ -13,25 +15,6 @@
         <!-- <link rel="stylesheet" href="style.css"> -->
     </head>
     <body>  
-        <?php
-            $userErr = "";
-            $user = "";
-
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                if (empty($_POST["Zip"])) {
-                    $userErr = "User name is required";
-                    } else {
-                    $user = test_input($_POST["Zip"]);
-                }
-            }
-
-            function test_input($data) {
-                $data = trim($data);
-                $data = stripslashes($data);
-                $data = htmlspecialchars($data);
-                return $data;
-            }
-        ?>
             <h2>No clue on what to play tonight let us choose for you</h2>
             <p id="intro">Enter your user name on BGG and we'll tell you what to play</p>
             <hr />
@@ -44,47 +27,6 @@
             <hr />
 
         <?php
-            function rest_call($method, $url, $data = false, $contentType= false, $token = false)
-        {
-            $curl = curl_init();
-
-            if($token){ //Add Bearer Token header in the request
-                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-                    'Authorization: '.$token
-                ));
-            }
-
-            switch ($method)
-            {
-                case "POST":
-                    curl_setopt($curl, CURLOPT_POST, 1);
-                    if ($data){
-                        if($contentType){
-                            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-                                'Content-Type: '.$contentType
-                            ));
-                        }
-                        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                    }
-                    break;
-                case "PUT":
-                    curl_setopt($curl, CURLOPT_PUT, 1);
-                    break;
-                default:
-                    if ($data)
-                        $url = sprintf("%s?%s", $url, http_build_query($data));
-            }
-
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-            $result = curl_exec($curl);
-
-            curl_close($curl);
-
-            return $result;
-        }
-            
             $gamelist = rest_call("GET","https://boardgamegeek.com/xmlapi2/collection?username=" . $user . "&excludesubtype=boardgameexpansion&preordered=0");
             
             $xmlGameList = simplexml_load_string($gamelist);
@@ -109,6 +51,7 @@
             </p>";
 
             echo "<p><u>Your list</u></p>";
+
             foreach ($xmlGameList->item as $allGameItems ) {
                 echo "<a href='https://boardgamegeek.com/" . $allGameItems->attributes()->subtype . "/" . $allGameItems->attributes()->objectid . "/" . $allGameItems->name . "' target='_blank'>" . $allGameItems->name . "</a> - ";
                 
