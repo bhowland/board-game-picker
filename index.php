@@ -1,10 +1,11 @@
-<!-- TODO 
-Add player count &stats=1 <stats minplayers="2" maxplayers="4" minplaytime="60" maxplaytime="60" playingtime="60" numowned="69100">
-Add time range ie I want to play this long &stats=1
-coop vs competive 
-add expantions options
-a ban list
--->
+<?php 
+    // TODO 
+    // Add player count &stats=1 <stats minplayers="2" maxplayers="4" minplaytime="60" maxplaytime="60" playingtime="60" numowned="69100">
+    // Add time range ie I want to play this long &stats=1
+    // coop vs competive 
+    // add expantions options
+    // a ban list
+?>
 <!DOCTYPE HTML>  
 <html>
     <head>
@@ -31,7 +32,7 @@ a ban list
                 return $data;
             }
         ?>
-            <h2>No clue on what to play tonight let us chose for you</h2>
+            <h2>No clue on what to play tonight let us choose for you</h2>
             <p id="intro">Enter your user name on BGG and we'll tell you what to play</p>
             <hr />
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
@@ -89,16 +90,23 @@ a ban list
             $xmlGameList = simplexml_load_string($gamelist);
             $i = 0;
             foreach ($xmlGameList->item as $allGameItems ) {
-
                 $i++;
             }    
         ?>
 
         <?php
             $slashFour = rand(0, ($i-1));
-            echo "<p>Total games counted:" . $i . "";
+            echo "<p>Total games counted:" . $i . "</p>";
             
-            echo "<p id='city'>Today to are playing: <a href='https://boardgamegeek.com/" . $xmlGameList->item[$slashFour]->attributes()->subtype . "/" . $xmlGameList->item[$slashFour]->attributes()->objectid . "/" . $xmlGameList->name . "' target='_blank'>" . $xmlGameList->item[$slashFour]->name . "</a>  <br /><a href='https://boardgamegeek.com/" . $xmlGameList->item[$slashFour]->attributes()->subtype . "/" . $xmlGameList->item[$slashFour]->attributes()->objectid . "/" . $xmlGameList->name . "' target='_blank'><img src=" . $xmlGameList->item[$slashFour]->thumbnail . " /></a></p>";
+            echo "<p id='city'>Today to are playing: 
+                <a href='https://boardgamegeek.com/" . $xmlGameList->item[$slashFour]->attributes()->subtype . "/" . $xmlGameList->item[$slashFour]->attributes()->objectid . "/" . $xmlGameList->name . "' target='_blank'>" 
+                    . $xmlGameList->item[$slashFour]->name . "
+                </a>
+                <br />
+                <a href='https://boardgamegeek.com/" . $xmlGameList->item[$slashFour]->attributes()->subtype . "/" . $xmlGameList->item[$slashFour]->attributes()->objectid . "/" . $xmlGameList->name . "' target='_blank'>
+                    <img src=" . $xmlGameList->item[$slashFour]->thumbnail . " />
+                </a>
+            </p>";
 
             echo "<p><u>Your list</u></p>";
             foreach ($xmlGameList->item as $allGameItems ) {
