@@ -1,11 +1,4 @@
 <?php 
-    // TODO 
-    // Add player count &stats=1 <stats minplayers="2" maxplayers="4" minplaytime="60" maxplaytime="60" playingtime="60" numowned="69100">
-    // Add time range ie I want to play this long &stats=1
-    // coop vs competive 
-    // add expantions options
-    // a ban list
-    // statistics->ratings->average['value'], 1);
     // https://boardgamegeek.com/thread/2009486/using-api-get-game-weight
     require 'curlFile.php';
     include 'validate.php'
