@@ -5,6 +5,8 @@
     // coop vs competive 
     // add expantions options
     // a ban list
+    // statistics->ratings->average['value'], 1);
+    // https://boardgamegeek.com/thread/2009486/using-api-get-game-weight
     require 'curlFile.php';
     include 'validate.php'
 ?>
@@ -30,16 +32,56 @@
             $gamelist = rest_call("GET","https://boardgamegeek.com/xmlapi2/collection?username=" . $user . "&excludesubtype=boardgameexpansion&preordered=0");
             
             $xmlGameList = simplexml_load_string($gamelist);
+
             $i = 0;
+            $result_i = 0 ;
+            $playerCount = 0;
+
+            $SuggestedPlayerCount = 0;
+            $highestRecommended = 0;
+            
+
             foreach ($xmlGameList->item as $allGameItems ) {
                 $i++;
-            }    
+            } 
         ?>
 
         <?php
             $slashFour = rand(0, ($i-1));
-            echo "<p>Total games counted:" . $i . "</p>";
             
+            $gameIdNumber = $xmlGameList->item[$slashFour]->attributes()->objectid;
+            $gameStatList = rest_call("GET","https://boardgamegeek.com/xmlapi2/thing?id=" . $gameIdNumber . "&stats=1");
+            $xmlGameStatList = simplexml_load_string($gameStatList);
+
+            foreach ($xmlGameStatList->item->poll->results as $resultTotalCount) {
+                $result_i++;
+                $playerRankTotal=$resultTotalCount['numplayers'];
+                echo "result count " . $result_i . " Player count " . $playerRankTotal . "<br />";
+                foreach ($resultTotalCount->result as $result) {
+                    echo $result->attributes()->value . " " . $result->attributes()->numvotes . "<br />";
+                }
+                echo "<br />";
+            }  
+
+            // while ( $result_i > ($xmlGameStatList->item->poll->results->attributes()->numplayers[$playerCount])){
+            //     if ($xmlGameStatList->item->poll->results->attributes()->numplayers->result->attributes()->recommended > $highestRecommended) {
+            //         $highestRecommended = $xmlGameStatList->item->poll->results->attributes()->numplayers->result->attributes()->recommended;
+            //     }
+                // $playerCount++;
+                // echo "result count " . $result_i . " Player count " . $xmlGameStatList->item->poll->results->attributes()->numplayers . "<br />";
+                
+            // }
+            // else{continue;}
+            /////////////// TEST ////////////////////////////
+            echo "ID: " . $gameIdNumber . "<br />"; 
+            echo "result count: " . $result_i . "<br />";
+            echo "Player count: " . $playerRankTotal . "<br />";
+            echo "Link to Stats: <a href=https://boardgamegeek.com/xmlapi2/thing?id=" . $gameIdNumber . "&stats=1 target='_blank'>https://boardgamegeek.com/xmlapi2/thing?id=" . $gameIdNumber . "&stats=1</a> <br />";
+            echo "Collection of: <a href=https://boardgamegeek.com/xmlapi2/collection?username=" . $user . "&excludesubtype=boardgameexpansion&preordered=0 target='_blank'>". $user . "</a><br />";
+            echo "player count: " . $xmlGameStatList->item->poll->results->attributes()->numplayers . "<br />";
+            /////////////////////////////////////////////////////
+
+            echo "<p>Total games counted:" . $i . "</p>";
             echo "<p id='city'>Today to are playing: 
                 <a href='https://boardgamegeek.com/" . $xmlGameList->item[$slashFour]->attributes()->subtype . "/" . $xmlGameList->item[$slashFour]->attributes()->objectid . "/" . $xmlGameList->name . "' target='_blank'>" 
                     . $xmlGameList->item[$slashFour]->name . "
@@ -49,6 +91,8 @@
                     <img src=" . $xmlGameList->item[$slashFour]->thumbnail . " />
                 </a>
             </p>";
+
+            echo "<p>Rating:" . $highestRecommended . "</p>";
 
             echo "<p><u>Your list</u></p>";
 
