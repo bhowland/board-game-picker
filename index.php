@@ -1,7 +1,8 @@
 <?php 
     // https://boardgamegeek.com/thread/2009486/using-api-get-game-weight
     require 'curlFile.php';
-    include 'validate.php'
+    include 'validate.php';
+    require 'variables.php';
 ?>
 <!DOCTYPE HTML>  
 <html>
@@ -21,30 +22,9 @@
             </form>
             <hr />
 
-        <?php
-            $gamelist = rest_call("GET","https://boardgamegeek.com/xmlapi2/collection?username=" . $user . "&excludesubtype=boardgameexpansion&preordered=0");
-            
-            $xmlGameList = simplexml_load_string($gamelist);
 
-            $i = 0;
-            $result_i = 0 ;
-            $playerCount = 0;
-
-            $SuggestedPlayerCount = 0;
-            $highestRecommended = 0;
-            
-
-            foreach ($xmlGameList->item as $allGameItems ) {
-                $i++;
-            } 
-        ?>
 
         <?php
-            $slashFour = rand(0, ($i-1));
-            
-            $gameIdNumber = $xmlGameList->item[$slashFour]->attributes()->objectid;
-            $gameStatList = rest_call("GET","https://boardgamegeek.com/xmlapi2/thing?id=" . $gameIdNumber . "&stats=1");
-            $xmlGameStatList = simplexml_load_string($gameStatList);
 
             foreach ($xmlGameStatList->item->poll->results as $resultTotalCount) {
                 $result_i++;
@@ -65,35 +45,27 @@
                 
             // }
             // else{continue;}
-            /////////////// TEST ////////////////////////////
-            echo "ID: " . $gameIdNumber . "<br />"; 
-            echo "result count: " . $result_i . "<br />";
-            echo "Player count: " . $playerRankTotal . "<br />";
-            echo "Link to Stats: <a href=https://boardgamegeek.com/xmlapi2/thing?id=" . $gameIdNumber . "&stats=1 target='_blank'>https://boardgamegeek.com/xmlapi2/thing?id=" . $gameIdNumber . "&stats=1</a> <br />";
-            echo "Collection of: <a href=https://boardgamegeek.com/xmlapi2/collection?username=" . $user . "&excludesubtype=boardgameexpansion&preordered=0 target='_blank'>". $user . "</a><br />";
-            echo "player count: " . $xmlGameStatList->item->poll->results->attributes()->numplayers . "<br />";
-            /////////////////////////////////////////////////////
 
-            echo "<p>Total games counted:" . $i . "</p>";
-            echo "<p id='city'>Today to are playing: 
-                <a href='https://boardgamegeek.com/" . $xmlGameList->item[$slashFour]->attributes()->subtype . "/" . $xmlGameList->item[$slashFour]->attributes()->objectid . "/" . $xmlGameList->name . "' target='_blank'>" 
-                    . $xmlGameList->item[$slashFour]->name . "
+        ?>
+            <p>Total games counted: <?= $i ?></p>
+            <p id='city'>Today to are playing: 
+                <a href='https://boardgamegeek.com/<?= $xmlGameList->item[$slashFour]->attributes()->subtype ?>/<?= $xmlGameList->item[$slashFour]->attributes()->objectid ?>/<?= $xmlGameList->name ?>target='_blank'> 
+                    <?= $xmlGameList->item[$slashFour]->name ?>
                 </a>
                 <br />
-                <a href='https://boardgamegeek.com/" . $xmlGameList->item[$slashFour]->attributes()->subtype . "/" . $xmlGameList->item[$slashFour]->attributes()->objectid . "/" . $xmlGameList->name . "' target='_blank'>
-                    <img src=" . $xmlGameList->item[$slashFour]->thumbnail . " />
+                <a href='https://boardgamegeek.com/<?= $xmlGameList->item[$slashFour]->attributes()->subtype ?>/<?= $xmlGameList->item[$slashFour]->attributes()->objectid ?>/<?= $xmlGameList->name ?>'target='_blank'>
+                    <img src=" <?= $xmlGameList->item[$slashFour]->thumbnail ?>" />
                 </a>
-            </p>";
+            </p>
 
-            echo "<p>Rating:" . $highestRecommended . "</p>";
+            <p>Rating: <?= $highestRecommended ?></p>
 
-            echo "<p><u>Your list</u></p>";
-
-            foreach ($xmlGameList->item as $allGameItems ) {
-                echo "<a href='https://boardgamegeek.com/" . $allGameItems->attributes()->subtype . "/" . $allGameItems->attributes()->objectid . "/" . $allGameItems->name . "' target='_blank'>" . $allGameItems->name . "</a> - ";
+            <p><u>Your list</u></p>
+        <?php
+            foreach ($xmlGameList->item as $allGameItems ) { ?>
+                <a href="https://boardgamegeek.com/<?= $allGameItems->attributes()->subtype ?> / <?= $allGameItems->attributes()->objectid ?> / <?= $allGameItems->name ?> " target="_blank"> <?= $allGameItems->name ?> </a> - ;
                 
-                echo $allGameItems->yearpublished, '<br /> ';
-            }  
-        ?>
+                <?= $allGameItems->yearpublished ?> <br />;
+            <?php }  ?>
     </body>
 </html>
