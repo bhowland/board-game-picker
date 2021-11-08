@@ -1,7 +1,5 @@
 <?php 
     // https://boardgamegeek.com/thread/2009486/using-api-get-game-weight
-    require 'curlFile.php';
-    include 'validate.php';
     require 'variables.php';
 ?>
 <!DOCTYPE HTML>  
@@ -25,7 +23,7 @@
 
 
         <?php
-
+            
             foreach ($xmlGameStatList->item->poll->results as $resultTotalCount) {
                 $result_i++;
                 $playerRankTotal=$resultTotalCount['numplayers'];
