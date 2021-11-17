@@ -3,10 +3,10 @@
     $user = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (empty($_POST["Zip"])) {
+        if (empty($_POST["ID"])) {
             $userErr = "User name is required";
             } else {
-            $user = test_input($_POST["Zip"]);
+            $user = test_input($_POST["ID"]);
         }
     }
 
