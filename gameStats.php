@@ -10,7 +10,10 @@
     </p>
         <div id="playerPolls" style="width:100%;display:flow-root;">
         <?php
-            foreach ($xmlGameStatList->item->poll->results as $resultTotalCount) {
+            $test = $xmlGameStatList->item->poll->results;
+            // $limitIterator = new LimitIterator($test);
+
+            foreach ($test as $resultTotalCount) {
                 $result_i++;
                 $playerRankTotal=$resultTotalCount['numplayers'];
                 echo "<p style='max-width: 30%;float: left;display: inline;padding-right:1%'>Player count " . $playerRankTotal . "<br />";
