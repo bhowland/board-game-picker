@@ -29,7 +29,7 @@
             <p><u>Your list of a total: <?= $i ?></u></p>
             <?php
                 foreach ($xmlGameList->item as $allGameItems ) { ?>
-                    <a href="https://boardgamegeek.com/<?= $allGameItems->attributes()->subtype ?> / <?= $allGameItems->attributes()->objectid ?> / <?= $allGameItems->name ?> " target="_blank"> <?= $allGameItems->name ?> </a> - 
+                    <a href="https://boardgamegeek.com/<?= $allGameItems->attributes()->subtype ?>/<?= $allGameItems->attributes()->objectid ?>/<?= $allGameItems->name ?> " target="_blank"><?= $allGameItems->name ?></a> - 
                     <?= $allGameItems->yearpublished ?> <br />
             <?php }  ?>
         </body>
