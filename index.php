@@ -18,14 +18,16 @@
                 <input  id="getbutton" type="submit" name="submit" value="Submit">  
             </form>
             <hr />
-            <?php $whileLoop_i=0; 
-                while ( $whileLoop_i <= 2 ) {  
-                    $slashFour = rand(0, ($i-1));
-                    include 'randomGame.php';
-                    include 'gameStats.php'; 
-                    $whileLoop_i++; 
-                } 
+            <?php 
+                getRandomGame($i, $xmlGameList, $result_i);
+                
+                if(array_key_exists('hateButton', $_POST)) {
+                    getRandomGame($i, $xmlGameList, $result_i);
+                }
             ?>
+            <form method="post">
+                <input type="submit" name="hateButton" class="button" value="New choices" />
+            </form>
             <p><u>Your list of a total: <?= $i ?></u></p>
             <?php
                 foreach ($xmlGameList->item as $allGameItems ) { ?>
